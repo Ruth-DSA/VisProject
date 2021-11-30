@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema>
+  <attribute>
+	<type>java.lang.String</type>
+	<name>Country</name>
+  </attribute>
+  <attribute>
+	<type>int</type>
+	<name>Year</name>
+  </attribute>
+  <attribute>
+	<type>java.lang.String</type>
+	<name>Sex</name>
+  </attribute>
+  <attribute>
+	<type>java.lang.String</type>
+	<name>Age</name>
+  </attribute>
+  <attribute>
+	<type>int</type>
+	<name>Suicides</name>
+  </attribute>
+  <attribute>
+	<type>int</type>
+	<name>Population</name>
+  </attribute>
+  <attribute>
+	<type>int</type>
+	<name>Suicides/100k Pop</name>
+  </attribute>
+  <attribute>
+	<type>java.lang.String</type>
+	<name>Country-Year</name>
+  </attribute>
+  <attribute>
+	<type>float</type>
+	<name>HDI per Year</name>
+  </attribute>
+  <attribute>
+	<type>int</type>
+	<name>GDP</name>
+  </attribute>
+  <attribute>
+	<type>int</type>
+	<name>Generation</name>
+  </attribute>
+</schema>
