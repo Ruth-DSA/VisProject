@@ -1,21 +1,33 @@
-heat_map = function(data){
+get_heatmap_data = function(data){
   library(tidyverse)
-  library(plotly)
+  library(dplyr)
   
-  # collect and aggregate data for chart
-  data = data %>%
-    arrange(region, year) %>% # sort
-    mutate(gdp = as.numeric(gsub(",","",gdp_per_capita....))) %>% # convert gdp to numeric value
-    group_by(region, year) %>% # group
-    summarize(suicides = sum(suicides.100k.pop), gdp = first(gdp)) %>% # sum suicides by region
-    ungroup() %>% # ungroup
-    mutate(decade = if_else(year >= 2005, '2005-2016', 'NA')) %>% # create decade 'bins'
-    mutate(decade = if_else(year >= 1995 & year < 2005, '1995-2004', decade)) %>%
-    mutate(decade = if_else(decade == 'NA', '1985-1994', decade)) %>%
-    group_by(region, decade) %>% # group
-    summarize(suicides = sum(suicides), gdp = sum(gdp)) %>% # sum by decade
-    arrange(desc(suicides))
-  
-  fig <- plot_ly(x = data$suicides, y = data$year, z = volcano, type = "heatmap")
-  fig
+  new_data = data %>%
+    arrange(region, year) %>%
+    group_by(region, generation, sex) %>%
+    summarise(suicides = sum(suicides_no)) %>%
+    mutate(region_sex = paste(region, sex))
+  new_data
 }
+
+get_heatmap_plot = function(data){
+  library(plotly)
+  library(hrbrthemes)
+  library(viridis)
+  library(ggplot2)
+
+  plot = ggplot(data, aes(x=as.factor(region_sex), y=as.factor(generation), fill=as.factor(suicides))) +
+    geom_tile() +
+    scale_fill_viridis(discrete=TRUE, guide=none) +
+    theme_ipsum() +
+    theme(legend.position="bottom") +
+    ylab("Generation") +
+    xlab("Region & Sex") +
+    theme(axis.text.x = element_text(angle = 305, hjust = -.15)) +
+    theme(legend.position = "none")
+  
+  # interactive plot
+  interactive_plot = ggplotly(plot)
+  interactive_plot
+}
+
