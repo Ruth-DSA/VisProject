@@ -1,5 +1,9 @@
+# Timeline of app
+# X-axis shows year
+# Y-axis shows number of suicides
+# each line shows a gender or a gender by region
+
 get_timeline_data = function(data, byRegion, yrs, rates){
-  library(tidyverse)
   
   if(byRegion){
     new_data = data %>%
@@ -19,29 +23,38 @@ get_timeline_data = function(data, byRegion, yrs, rates){
 }
 
 get_timeline_plot = function(data, byRegion){
-  library(ggplot2)
-  library(hrbrthemes)
-  library(viridis)
   
   if(byRegion){
     plot = data %>%
-      ggplot(aes(x=year, y=suicides, group=region_sex, color=region_sex)) +
+      mutate(text = paste("Region: ", region,
+                          "\nYear: ", year,
+                          "\nGender: ", sex,
+                          "\nNum Suicides: ", suicides,
+                          sep="")) %>%
+      
+      ggplot(aes(x=year, y=suicides, group=region_sex, color=region_sex, text=text)) +
       geom_line() +
       scale_color_viridis(discrete = TRUE) +
       theme_ipsum() +
       ylab("Number of Suicides") + 
-      xlab('Year')
+      xlab('Year') +
+      scale_x_continuous(breaks = pretty_breaks())
   }else{
     plot = data %>%
-      ggplot(aes(x=year, y=suicides, group=sex, color=sex)) +
+      mutate(text = paste("\nYear: ", year,
+                          "\nGender: ", sex,
+                          "\nNum Suicides: ", suicides,
+                          sep="")) %>%
+      ggplot(aes(x=year, y=suicides, group=sex, color=sex, text=text)) +
       geom_line() +
       scale_color_viridis(discrete = TRUE) +
       theme_ipsum() +
       ylab("Number of Suicides") + 
-      xlab('Year')
+      xlab('Year') +
+      scale_x_continuous(breaks = pretty_breaks())
   } 
   
-  interactive_plot = ggplotly(plot)
+  interactive_plot = ggplotly(plot, tooltip = 'text')
   interactive_plot
   
 }

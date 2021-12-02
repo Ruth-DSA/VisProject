@@ -1,3 +1,6 @@
+# server file of shiny app
+# connects inputs and outputs of ui
+# calls each graphs functions to collect data and plot graph
 
 server = function(input, output, session) {
     file_path = "../data/new_master.csv"

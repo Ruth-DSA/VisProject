@@ -1,5 +1,9 @@
+# Stream graph of app
+# X-axis shows year
+# Y-axis shows number of suicides
+# each line shows a generation or a generation by region
+
 get_streamgraph_data = function(data, byRegion, yrs, rates){
-  library(tidyverse)
   
   if(byRegion){
     new_data = data %>%
@@ -19,24 +23,39 @@ get_streamgraph_data = function(data, byRegion, yrs, rates){
 }
 
 get_streamgraph_plot = function(data, byRegion){
-  library(ggstream)
-  library(hrbrthemes)
-  library(viridis)
-  library(plotly)
   
   if(byRegion){
-    plot = ggplot(data, aes(x = year, y = suicides, fill = region_gen)) +
+    plot = data %>%
+      mutate(text = paste("Region: ", region,
+                          "\nYear: ", year,
+                          "\nGeneration: ", generation,
+                          "\nNum Suicides: ", suicides,
+                          sep="")) %>%
+      ggplot(aes(x = year, y = suicides, fill = region_gen, text=text)) +
       geom_stream(color = 1, lwd = 0.25) +
       scale_fill_viridis(discrete=TRUE, guide='none')+
-      theme_ipsum() 
+      theme_ipsum() +
+      xlab('Year') +
+      ylab('Number of  Suicides') +
+      scale_y_continuous(labels = comma) +
+      scale_x_continuous(breaks = pretty_breaks())
   }else{
-    plot = ggplot(data, aes(x = year, y = suicides, fill = generation)) +
+    plot = data %>%
+      mutate(text = paste("\nYear: ", year,
+                          "\nGeneration: ", generation,
+                          "\nNum Suicides: ", suicides,
+                          sep="")) %>%
+      ggplot(data, aes(x = year, y = suicides, fill = generation, text=text)) +
       geom_stream(color = 1, lwd = 0.25) +
       scale_fill_viridis(discrete=TRUE, guide='none')+
-      theme_ipsum() 
+      theme_ipsum() +
+      xlab('Year') +
+      ylab('Number of  Suicides') +
+      scale_y_continuous(labels = comma) +
+      scale_x_continuous(breaks = pretty_breaks())
   }
   
-  interactive_plot = ggplotly(plot)
+  interactive_plot = ggplotly(plot, tooltip = 'text')
   interactive_plot
 }
 

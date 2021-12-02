@@ -1,6 +1,9 @@
+# Heatmap of app
+# X-axis shows gender and region
+# Y-axis shows generation
+# color of box shows number of suicides
+
 get_heatmap_data = function(data){
-  library(tidyverse)
-  library(dplyr)
   
   new_data = data %>%
     arrange(region, year) %>%
@@ -11,12 +14,13 @@ get_heatmap_data = function(data){
 }
 
 get_heatmap_plot = function(data){
-  library(plotly)
-  library(hrbrthemes)
-  library(viridis)
-  library(ggplot2)
 
-  plot = ggplot(data, aes(x=as.factor(region_sex), y=as.factor(generation), fill=as.factor(suicides))) +
+  plot = data %>%
+    mutate(text = paste("Region: ", region,
+                        "\nGender: ", sex,
+                        "\nNum Suicides: ", suicides,
+                             sep="")) %>%
+    ggplot(aes(x=as.factor(region_sex), y=as.factor(generation), fill=as.factor(suicides), text=text)) +
     geom_tile() +
     scale_fill_viridis(discrete=TRUE, guide=none) +
     theme_ipsum() +
@@ -27,7 +31,7 @@ get_heatmap_plot = function(data){
     theme(legend.position = "none")
   
   # interactive plot
-  interactive_plot = ggplotly(plot)
+  interactive_plot = ggplotly(plot, tooltip="text")
   interactive_plot
 }
 

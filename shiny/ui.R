@@ -1,4 +1,4 @@
-
+# user interface of shiny app
 
 ui = fluidPage(theme = shinytheme("cosmo"),
   

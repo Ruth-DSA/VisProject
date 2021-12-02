@@ -1,7 +1,11 @@
+# Bubble plot of app
+# X-axis shows years grouped by decade
+# Y-axis shows regional GDP
+# color of circle shows region
+# size of circle shows number of suicides
+
 # function to filter data
 get_bubble_data = function(data, decades){
-  library(tidyverse)
-  library(dplyr)
   
   if(is.null(decades)){
       decades = c('1985-1994', '1995-2004', '2005-2016')
@@ -28,10 +32,6 @@ get_bubble_data = function(data, decades){
 
 # function to create bubble plot
 get_bubble_plot = function(data){
-  library(plotly)
-  library(hrbrthemes)
-  library(viridis)
-  library(ggplot2)
 
   # prepare text for tooltip
   plot = data %>%
@@ -46,10 +46,10 @@ get_bubble_plot = function(data){
     scale_size(range = c(.1, 24), name="Number of Suicides") +
     scale_fill_viridis(discrete=TRUE) +
     theme_ipsum() +
-    theme(legend.position="bottom") +
     ylab("Gdp per Decade") +
     xlab("Decade") +
-    theme(legend.position = "none")
+    theme(legend.position = "none") +
+    scale_y_continuous(labels = comma)
 
   # interactive plot
   interactive_plot = ggplotly(plot, tooltip="text")
