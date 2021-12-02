@@ -15,8 +15,7 @@ ui = fluidPage(theme = shinytheme("cosmo"),
                  'Decade:',
                  choices = c('1985-1994' = '1985-1994',
                              '1995-2004' = '1995-2004',
-                             '2005-2016' = '2005-2016')
-
+                             '2005-2016' = '2005-2016'),
                ),
 
                checkboxInput(
